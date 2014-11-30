@@ -1,0 +1,20 @@
+import sqlite3
+cx = sqlite3.connect("d:\\test.db")
+
+cu=cx.cursor()
+cu.execute("""create table catalog ( id integer primary key, pid integer, name varchar(10) UNIQUE )""")
+cu.execute("insert into catalog values(0, 0, 'name1')")
+cu.execute("insert into catalog values(1, 0, 'hello')")
+cx.commit()
+cu.execute("select * from catalog")
+cu.fetchall()[(0, 0, 'name2'), (1, 0, 'hello')]
+fetchall()
+cu.execute("select * from catalog where id = 1")
+cu.fetchone() (1, 0, 'hello')
+
+
+cu.execute("update catalog set name='name2' where id = 0")
+>>> cx.commit() >>> cu.execute("select * from catalog")
+>>> cu.fetchone() (0, 0, 'name2')4.6 delete(É¾³ý)
+>>> cu.execute("delete from catalog where id = 1") >>> cx.commit()
+>>> cu.execute("select * from catalog") >>> cu.fetchall() [(0, 0, 'name2')]

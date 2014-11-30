@@ -1,0 +1,47 @@
+import Graphis
+import sys
+
+def Prim(G,s):
+    path={}
+    pre={}
+    alist=[]
+    for v in G:
+        alist.append(v)
+        path[v]=sys.maxsize
+        pre[v]=s
+    path[s]=0
+    queue=PriorityQueue(path)
+    queue.buildHeap(alist)
+    while queue.size>0:
+        vertex=queue.delMin()
+        for v in vertex.getNeighbors():
+            newpath=vertex.getWeight(v)
+            if v in queue.queue and newpath<path[v]:
+                path[v]=newpath
+                pre[v]=vertex
+                queue.perUp(v)
+    return pre
+if __name__=='__main__':
+    g= Graphis.Graph()
+    g.addEdge('a','b',2)
+    g.addEdge('b','a',2)
+    g.addEdge('a','c',3)
+    g.addEdge('c','a',3)
+    g.addEdge('b','c',1)
+    g.addEdge('c','b',1)
+    g.addEdge('b','d',1)
+    g.addEdge('d','b',1)
+    g.addEdge('d','e',1)
+    g.addEdge('e','d',1)
+    g.addEdge('b','e',4)
+    g.addEdge('e','b',4)
+    g.addEdge('c','f',5)
+    g.addEdge('f','c',5)
+    g.addEdge('e','f',1)
+    g.addEdge('f','e',1)
+    g.addEdge('f','g',1)
+    g.addEdge('g','f',1)
+    u=g.getVertex('a')
+    path=Prim(g,u)
+    for v in path:
+        print v.id,' after ',path[v].id

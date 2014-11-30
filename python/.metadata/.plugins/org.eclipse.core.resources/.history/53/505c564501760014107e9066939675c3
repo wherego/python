@@ -1,0 +1,144 @@
+class BST(object):
+    """二叉查找树的简单实现"""
+    def __init__(self):
+        self.root = None
+
+    def insert(self, val):
+        newNode = BSTnode(val)
+        if self.root is None:
+            self.root = newNode
+        else:
+            curNode = self.root
+            while True:
+                if val < curNode.val:
+                    #进入左子树
+                    if curNode.left is None:
+                        curNode.left = newNode
+                        newNode.parent = curNode
+                        break
+                    curNode = curNode.left
+                else:
+                    #进入右子树
+                    if curNode.right is None:
+                        curNode.right = newNode
+                        newNode.parent = curNode
+                        break
+                    curNode = curNode.right
+
+    def find(self, val):
+        curNode = self.root
+        while curNode is not None:
+            if val < curNode.val:
+                curNode = curNode.left
+            elif val > curNode.val:
+                curNode = curNode.right
+            else:
+                return True  # 找到了！
+
+        return False  # 没找到
+
+    def delete(self, val):
+        curNode = self.root
+        while curNode is not None:
+            if val < curNode.val:
+                curNode = curNode.left
+            elif val > curNode.val:
+                curNode = curNode.right
+            else:
+                # 找到了val
+                if curNode.left is not None and curNode.right is not None:
+                    target = self.successor(curNode.right).val
+                    curNode.val = target.val
+                    self.delete(target)
+                elif curNode.left is not None:
+                    if curNode == self.root:
+                        self.root = curNode.left
+                    parNode = curNode.parent
+                    subNode = curNode.left
+                    if parNode.left == curNode:
+                        parNode.left = subNode
+                    else:
+                        parNode.right = subNode
+                    subNode.parent = parNode
+                else:
+                    if curNode == self.root:
+                        self.root = curNode.right
+                    parNode = curNode.parent
+                    subNode = curNode.right
+                    if parNode.right == curNode:
+                        parNode.right = subNode
+                    else:
+                        parNode.left = subNode
+
+                return True
+        return False  # 不存在val，删除失败
+
+    def minimum(self, node):
+        # 返回最小值的节点。其实就是most left one
+        curNode = node
+        if curNode is None:
+            #空树
+            return None
+        while curNode.left is not None:
+            curNode = curNode.left
+        return curNode
+
+    def maximum(self, node):
+        #返回最大值的节点。其实就是most right one
+        curNode = node
+        if curNode is None:
+            #空树
+            return None
+        while curNode.right is not None:
+            curNode = curNode.right
+        return curNode
+
+    def successor(self, node):
+        #node是二叉查找树中的一个节点
+        #寻找node的后继节点，然后返回
+        curNode = node
+        if curNode.right is not None:
+            #右子树非空，返回右子树最左节点
+            return self.minimun(curNode.right)
+        else:
+            #右子树为空，则返回“最低祖先”
+            parNode = curNode.parent
+            while parNode is not None and parNode.right == curNode:
+                curNode = parNode
+                parNode = parNode.parent
+            return parNode
+
+    def show(self):
+        # 中序遍历
+        self.display(self.root)
+        print '\n'
+
+    def display(self, node):
+        if node is None:
+            return
+        self.display(node.left)
+        print node.val,
+        self.display(node.right)
+
+#    def predecessor(self, node):
+        # 获取前驱节点。类似于获取后继节点，这里省略。。
+
+
+class BSTnode(object):
+    """二叉查找树的节点类型"""
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
+
+
+if __name__ == '__main__':
+    mylist = [2, 2, 7, 4, 1, 5]
+    bst = BST()
+    for i in range(len(mylist)):
+        bst.insert(mylist[i])
+
+    bst.show()
+    bst.delete(7)
+    bst.show()

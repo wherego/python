@@ -1,0 +1,5 @@
+import sqlite3
+cx = sqlite3.connect("d:\\test.db")
+
+cu.execute("create table catalog (id integer primary key,pid integer,name varchar(10) UNIQUE,nickname text NULL)")
+
